@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: comprasmart_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: comprasmart_db
+      POSTGRES_USER: comprasmart_user
+      POSTGRES_PASSWORD: comprasmart_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
