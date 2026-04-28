@@ -86,6 +86,7 @@ const sincronizarOportunidades = async (req, res) => {
     }
 
     const resultadoApi = await mercadoPublicoService.obtenerOportunidadesActivas();
+    const totalRecibidas = resultadoApi.oportunidades.length;
 
     if (!resultadoApi.integrado) {
       return error(res, resultadoApi.message, 400);
@@ -189,7 +190,8 @@ const sincronizarOportunidades = async (req, res) => {
       categorias,
       procesadas,
       omitidas,
-      detalle
+      detalle,
+      totalRecibidas
     });
   } catch (err) {
     console.error('Error en sincronización Mercado Público:', err);
