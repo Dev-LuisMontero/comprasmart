@@ -115,11 +115,6 @@ const app = {
               <input type="password" name="contrasena" placeholder="••••••••" required />
             </div>
 
-            <div class="auth-options">
-              <span>Recordar sesión</span>
-              <button type="button">Recuperar contraseña</button>
-            </div>
-
             <button type="submit" class="primary-btn">Ingresar</button>
           </form>
 
@@ -726,9 +721,20 @@ const app = {
   },
 
   async guardarOportunidad(id) {
-    await api.post(`/guardadas/${id}`);
-    this.state.guardadas = this.normalizeArray(await api.get('/guardadas').catch(() => []));
-    alert('Oportunidad guardada correctamente');
+    try {
+      await api.post(`/guardadas/${id}`);
+      this.state.guardadas = this.normalizeArray(await api.get('/guardadas').catch(() => []));
+
+      this.mostrarModalAccion(
+        'Oportunidad guardada',
+        'La oportunidad fue agregada correctamente a tu listado de oportunidades guardadas.'
+      );
+    } catch (error) {
+      this.mostrarModalAccion(
+        'Oportunidad ya guardada',
+        'Esta oportunidad ya se encuentra registrada en tu listado de oportunidades guardadas.'
+      );
+    }
   },
 
   renderAnalisis() {
@@ -1203,6 +1209,49 @@ const app = {
     if (modal) modal.remove();
   },
 
+  mostrarModalAccion(titulo, mensaje) {
+    const modalExistente = document.getElementById('appModal');
+    if (modalExistente) modalExistente.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'appModal';
+    modal.style.position = 'fixed';
+    modal.style.inset = '0';
+    modal.style.background = 'rgba(15, 23, 42, 0.45)';
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    modal.style.zIndex = '99999';
+
+    modal.innerHTML = `
+    <div style="
+      width: 460px;
+      max-width: calc(100% - 32px);
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.25);
+    ">
+      <h3 style="margin: 0 0 8px; color: #1e3a8a;">
+        ${titulo}
+      </h3>
+
+      <p style="margin: 0 0 18px; color: #4b5563; line-height: 1.4;">
+        ${mensaje}
+      </p>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 22px;">
+        <button id="modalAceptar" class="primary-btn" style="width: auto; min-width: 120px;">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  `;
+
+    document.body.appendChild(modal);
+    document.getElementById('modalAceptar').onclick = () => this.cerrarModal();
+  },
+
   renderPerfil() {
     const p = this.state.perfil || {};
 
@@ -1325,7 +1374,10 @@ const app = {
       };
 
       if (payload.montoMaxInteres < payload.montoMinInteres) {
-        alert('El monto máximo debe ser mayor o igual al monto mínimo.');
+        this.mostrarModalAccion(
+          'Monto inválido',
+          'El monto máximo debe ser mayor o igual al monto mínimo.'
+        );
         return;
       }
 
@@ -1336,7 +1388,10 @@ const app = {
       }
 
       this.state.perfil = await api.get('/perfiles/me').catch(() => null);
-      alert('Perfil guardado correctamente');
+      this.mostrarModalAccion(
+        'Perfil empresarial actualizado',
+        'La información del perfil empresarial fue guardada correctamente.'
+      );
     };
   },
 
