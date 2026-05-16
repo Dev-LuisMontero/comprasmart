@@ -1,147 +1,238 @@
 # CompraSmart
 
-CompraSmart es una plataforma web orientada al análisis de oportunidades en Compra Ágil de Mercado Público, con el objetivo de apoyar la toma de decisiones de proveedores mediante el análisis de datos históricos y filtrado de oportunidades.
+CompraSmart es una plataforma web orientada al análisis de oportunidades de Compra Ágil de Mercado Público, diseñada para apoyar la toma de decisiones de proveedores mediante el procesamiento y análisis de información pública relacionada con procesos de compra y adjudicación.
+
+El sistema permite consultar oportunidades, analizar históricos de adjudicación, generar alertas personalizadas y apoyar la evaluación de oportunidades comerciales mediante una arquitectura web moderna desplegada en Amazon Web Services (AWS).
 
 ---
 
-## Estado del proyecto
+## Características principales
 
-Proyecto en desarrollo correspondiente a la **Semana 4** del curso de Proyecto de Título.
-
-En esta etapa se ha trabajado en:
-
-- definición del modelo de datos relacional
-- diseño del diagrama entidad-relación (DER)
-- normalización hasta tercera forma normal (3FN)
-- implementación inicial de la base de datos en PostgreSQL
-- ejecución en entorno local mediante Docker
-- validación de estructura y relaciones desde cliente de base de datos (Navicat)
-- definición de arquitectura del sistema
-
----
-
-## Modelo de datos
-
-El sistema utiliza un **modelo relacional**, implementado en PostgreSQL, debido a que requiere:
-
-- datos estructurados
-- relaciones entre entidades
-- integridad referencial
-- consultas consistentes
-
-Las principales entidades del sistema son:
-
-- Rol
-- Usuario
-- Perfil Empresa
-- Oportunidad
-- Historial de Adjudicación
-- Análisis
-- Alerta
-- Oportunidad Guardada
-
----
-
-## Gestión de usuarios
-
-El sistema considera dos perfiles funcionales:
-
-- **Administrador**
-  - acceso completo a la gestión del sistema
-
-- **Proveedor**
-  - acceso restringido a funcionalidades operativas
-
-La gestión de permisos se realiza a nivel de aplicación (backend), utilizando la tabla `rol`.  
-No se implementa control de acceso mediante usuarios del motor PostgreSQL.
-
----
-
-## Base de datos
-
-La base de datos se encuentra implementada en PostgreSQL, ejecutándose en un contenedor Docker para facilitar el desarrollo local.
-
-### Tecnologías utilizadas
-
-- PostgreSQL 16
-- Docker Desktop
-- Navicat (administración y validación)
-
-### Configuración del contenedor
-
-POSTGRES_DB: comprasmart_db  
-POSTGRES_USER: comprasmart_user  
-POSTGRES_PASSWORD: comprasmart_pass  
-PORT: 5432  
-
----
-
-## Estructura del repositorio
-
-comprasmart/
-│
-├── docker-compose.yml
-├── README.md
-│
-├── database/
-│   ├── scripts/
-│   │   ├── 01_create_schema.sql
-│   │   ├── 02_seed_data.sql
-│   │   └── 03_test_queries.sql
-│   └── backups/
-│
-├── docs/
-│   ├── diagrama-er/
-│   ├── arquitectura/
-│   └── evidencias/
-│
-├── backend/
-│   └── src/
-│
-└── frontend/
-    └── assets/
-
----
-
-## Ejecución de la base de datos
-
-Para levantar el entorno local:
-
-docker compose up -d
-
-Para verificar el contenedor:
-
-docker ps
-
-La conexión se puede realizar desde cualquier cliente PostgreSQL utilizando:
-
-- Host: localhost  
-- Puerto: 5432  
-- Base de datos: comprasmart_db  
-- Usuario: comprasmart_user  
-- Contraseña: comprasmart_pass  
+- Autenticación de usuarios mediante JWT
+- Gestión de perfiles de usuario y empresa
+- Consulta de oportunidades de Compra Ágil
+- Integración con API pública de Mercado Público
+- Análisis de oportunidades y nivel de riesgo
+- Registro histórico de adjudicaciones
+- Gestión de alertas personalizadas
+- Guardado de oportunidades favoritas
+- Dashboard administrativo
+- API REST protegida
+- Arquitectura desplegada en AWS
 
 ---
 
 ## Arquitectura del sistema
 
-El sistema se basa en una arquitectura de tres capas:
+El sistema fue desarrollado utilizando una arquitectura cliente-servidor de tres capas:
 
-- **Capa de presentación**
-  - HTML, CSS, JavaScript
+### Capa de presentación
+Frontend desarrollado con:
+- HTML5
+- CSS3
+- JavaScript Vanilla
 
-- **Capa lógica**
-  - Node.js con Express
+### Capa lógica
+Backend desarrollado con:
+- Node.js
+- Express.js
 
-- **Capa de datos**
-  - PostgreSQL
+### Capa de datos
+Persistencia implementada con:
+- PostgreSQL
 
-Esta estructura permite separar responsabilidades, facilitar el mantenimiento y escalar el sistema en etapas posteriores.
+---
+
+## Infraestructura y despliegue cloud
+
+La solución se encuentra desplegada en Amazon Web Services (AWS) utilizando los siguientes servicios:
+
+- AWS Amplify Hosting
+- Amazon EC2
+- Amazon RDS PostgreSQL
+- Amazon CloudFront
+- Amazon Route 53
+- HTTPS / SSL
+
+### URLs públicas
+
+Frontend:
+https://comprasmart.freeddns.org
+
+Backend API:
+https://api.comprasmart.freeddns.org
+
+---
+
+## Tecnologías utilizadas
+
+### Frontend
+- HTML5
+- CSS3
+- JavaScript
+
+### Backend
+- Node.js
+- Express.js
+- JWT
+- Axios
+
+### Base de datos
+- PostgreSQL
+
+### Desarrollo
+- Docker Desktop
+- Visual Studio Code
+- Navicat
+- Git
+- GitHub
+- Postman
+
+### Cloud
+- AWS Amplify
+- Amazon EC2
+- Amazon RDS
+- Route 53
+- CloudFront
+
+---
+
+## Estructura del proyecto
+
+```text
+comprasmart/
+│
+├── backend/
+│
+├── frontend/
+│
+├── database/
+│   ├── scripts/
+│   └── diagrams/
+│
+├── docs/
+│
+├── docker-compose.yml
+│
+└── README.md
+```
+
+---
+
+## Base de datos
+
+La base de datos relacional fue implementada en PostgreSQL y normalizada hasta Tercera Forma Normal (3FN).
+
+### Principales entidades
+
+- rol
+- usuario
+- perfil_empresa
+- oportunidad
+- historial_adjudicacion
+- analisis
+- alerta
+- oportunidad_guardada
+- analisis_historial
+
+### Scripts disponibles
+
+```text
+database/scripts/
+├── 01_create_schema.sql
+├── 02_seed_data.sql
+└── 03_test_queries.sql
+```
+
+---
+
+## Ejecución local
+
+### Requisitos
+
+- Node.js
+- PostgreSQL
+- Docker Desktop
+- Git
+
+### Levantar entorno local
+
+```bash
+docker compose up -d
+```
+
+### Backend
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+### Frontend
+
+El frontend puede ejecutarse directamente desde entorno local o mediante Live Server en Visual Studio Code.
+
+---
+
+## Variables de entorno
+
+El proyecto utiliza variables de entorno para configuración sensible.
+
+Ejemplo:
+
+```env
+PORT=
+DB_HOST=
+DB_PORT=
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+JWT_SECRET=
+MERCADO_PUBLICO_API_URL=
+MERCADO_PUBLICO_TICKET=
+```
+
+---
+
+## API REST
+
+La aplicación expone endpoints REST para la gestión de usuarios, autenticación, oportunidades y análisis.
+
+### Principales rutas
+
+```text
+/api/auth
+/api/usuarios
+/api/perfiles
+/api/oportunidades
+/api/analisis
+/api/alertas
+/api/guardadas
+```
+
+---
+
+## Integración con Mercado Público
+
+El sistema consume información pública desde la API de Mercado Público para obtener oportunidades activas de Compra Ágil y procesarlas dentro de la plataforma.
+
+La información obtenida es normalizada y almacenada en PostgreSQL para permitir consultas, análisis y visualización desde el sistema.
+
+---
+
+## Estado del proyecto
+
+Proyecto académico finalizado correspondiente a la asignatura Proyecto de Título de la carrera Analista Programador de IPLACEX.
+
+El sistema se encuentra funcional y desplegado en entorno cloud para fines académicos y demostrativos.
 
 ---
 
 ## Autor
 
-Luis Eduardo Montero Rodríguez  
-Proyecto de Título – Analista Programador  
+Luis Eduardo Montero Rodríguez
+
+Proyecto de Título  
+Analista Programador  
 IPLACEX
